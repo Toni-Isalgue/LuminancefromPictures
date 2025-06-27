@@ -1,0 +1,98 @@
+Analysis of pictures 
+Pictures in dib1.bmp, dib2.bmp, dib3.bmp 
+ 
+Input keys: C1, SaltEv, Nbands, gamm, ASA/ISO, Nab, texp, Np 
+0 2 7 2.200000 200.000000 11.000000 0.003125 1 
+No. points find average (9p)  1 
+No.Points,  x , y: 1 100 100 
+ 
+Rectangles to average, coord.: N.rect, xini,xefe; yini,yefe 1 1000 1100 2000 2100 
+Rectangles to average, coord.: N.rect, xini,xefe; yini,yefe 2 1001 1101 2000 2100 
+Rectangles to average, coord.: N.rect, xini,xefe; yini,yefe 3 1002 1102 2000 2100 
+
+Computation with luminances in cd/m2 
+
+If it is not calibred, scale of luminances from 0 to 255*rrEV 
+If it is calibred, Value and Luminance of point: 0.000000 0.000000 coords x, y: 0 0 
+
+If data from picture, ev, rrEV, factorL(over 255): 14.240791 4.000000 27.854200 0.000000 
+lmax, from one maximum: 1827.304362 1853.746527 
+
+The picture has average value (non-compressed): 3238.585120 
+ 
+Normalized Luminance values at right of the lower bar (cd/m2): 10000.000000 
+ 
+ 
+Picture of height*width:  2304  3456 
+ 
+Average luminance and standard deviation (cd/m2, all picture): 3238.585120 2501.139248 
+ 
+Average  R  and  standard  deviation  (cd/m2): 1104.115384 896.273244 
+Average  G  and  standard  deviation  (cd/m2): 1135.329637 862.244002 
+Average  B  and  standard  deviation  (cd/m2): 999.140092 803.659115 
+ 
+r,  g,  b  (unitary) : 0.340925  0.350563  0.308511  
+ 
+ 
+ 
+Considered   Rectangle   #   1 
+x  Interval: 1000  1100 
+y  Interval: 2000  2100 
+Number of considered points: 10000 
+ 
+Average and standard deviation L on the rectangle: 1439.826622 1152.398266 
+Average and standard deviation R on the rectangle: 531.692148 425.228544 
+Average and standard deviation G on the rectangle: 549.246786 467.395868 
+Average and standard deviation B on the rectangle: 358.887688 402.762867 
+ 
+Coordinates r, g, b unitary: 0.369275 0.381467 0.249258 
+ 
+ 
+ 
+Considered   Rectangle   #   2 
+x  Interval: 1001  1101 
+y  Interval: 2000  2100 
+Number of considered points: 10000 
+ 
+Average and standard deviation L on the rectangle: 1443.995198 1148.049170 
+Average and standard deviation R on the rectangle: 533.533179 425.395513 
+Average and standard deviation G on the rectangle: 548.902753 464.989250 
+Average and standard deviation B on the rectangle: 361.559267 405.517724 
+ 
+Coordinates r, g, b unitary: 0.369484 0.380128 0.250388 
+ 
+ 
+ 
+Considered   Rectangle   #   3 
+x  Interval: 1002  1102 
+y  Interval: 2000  2100 
+Number of considered points: 10000 
+ 
+Average and standard deviation L on the rectangle: 1447.447950 1142.279184 
+Average and standard deviation R on the rectangle: 535.534046 425.937977 
+Average and standard deviation G on the rectangle: 548.824598 462.315665 
+Average and standard deviation B on the rectangle: 363.089307 404.434374 
+ 
+Coordinates r, g, b unitary: 0.369985 0.379167 0.250848 
+ 
+ 
+ 
+Results 3 pictures (dib1.bmp, dib2.bmp, dib3.bmp) 
+Point xl yl from left, down: 100 100 
+Values R,G,B, Lumin (cd/m2): 1679.937375 1660.535732 1355.384994 4695.858187 
+ 
+Results 1 picture (dib1.bmp) 
+Point xl yl from left, below: 100 100 
+Values R,G,B, Lumin (cd/m2) : 1679.937395 1660.535749 1355.384968 4695.858112 
+
+
+
+Values L bands from the picture (first band from 0 to first value), with factorL 27.854200: 
+ 0    0.000000  
+ 1    1572.807279  
+ 2    3940.831262  
+ 3    6387.794558  
+ 4    7592.995508  
+ 5    8751.375825  
+ 6    10000.000001  
+ 
