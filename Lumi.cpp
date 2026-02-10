@@ -28,7 +28,7 @@ long long alm,anm,ample,aa,aar,aag,aab,xini1[3],xefe1[3],yini1[3],yefe1[3];
 long long i, j, k, n9, ntimexp,interval,ix,iy,ii,ji,ik,jk,ir;
 long long xpat,ypat,vpunt,iluminp,escala2,npromirect;
 long long altura,anchura,f0alt,x,xl[100],yl[100],limit[20];
-double aargb,finterval,rpromirect,rpromirectr,rpromirectg,rpromirectb;
+double aargb,finterval,rpromirect,rpromirectr,rpromirectg,rpromirectb,calib;
 double Lm,falt,fanch,fanch1,falt1,rxl,ryl,r1r,ss,fnlmax,fnlmin,r2,g2,b2,lmax;
 double lc2,flc2,factorL,lc2r,lc2g,lc2b,flc2r,flc2g,flc2b;
 double ssr,ssg,ssb, rdesvrect,rdesvrecr,rdesvrecg,rdesvrecb,PL,PR,PG,PB;
@@ -105,7 +105,8 @@ printf("Lin12-13: xini, xefe: x start, x end, x define rectangle to find average
 printf("Lin14-15: yini, yefe, y start, x end, y define rectangle to find averages \n");
 printf("          Attention: coordinates from down, left picture \n");
 printf("Line24:   Value Normalize cd/m2 Luminance graph (to the right last division) \n");
-printf("Line25:   0, normal computation (reserved)\n");
+printf("Line25:   calib, 1=default, enter if <> 1\n");
+printf("Line26:   0, normal computation (reserved)\n");
 printf("Continue: Intro.   Exit: Ctrl-C \n");
 c=getchar();
 printf(" \n");
@@ -127,9 +128,10 @@ printf("          Values of luminance points indicated (average +/- 1 pixel, tot
 printf(" \n");
 printf("Start:  Intro. Exit: Ctrl-C \n");
 c=getchar();
+;
 ;  //End initializations   
-PunteroClave = fopen("input.dat","r");
 ;  //Read file with codes
+PunteroClave=fopen("input.dat","r");
    fgets(line, sizeof(line), PunteroClave);
     sscanf(line, "%ld", &Clave1);
    fgets(line, sizeof(line), PunteroClave);
@@ -222,6 +224,7 @@ b = fgetc(PunteroImagenInicial);
 fputc(b,PunteroImagenFinal);
 }
 ;	//move to starting image data
+;
 fseek(PunteroImagenInicial,bb+256*(gg+256*(rr+256*bmax)),SEEK_SET);  //goes directly to start of picture data. Assumed rgb bitmap!
 fseek(PunteroImagenInicial1,bb+256*(gg+256*(rr+256*bmax)),SEEK_SET);  //goes directly to start of picture data. Assumed rgb bitmap!
 fseek(PunteroImagenInicial2,bb+256*(gg+256*(rr+256*bmax)),SEEK_SET);  //goes directly to start of picture data. Assumed rgb bitmap!
@@ -254,7 +257,7 @@ for(i=1; i<=Clave9; i++)
 };  // end if Clave9>0
 ; //  out()
 ;
-printf("Rectangles first point included, last point no \n");   //3 cops
+printf("Rectangles (3) first point included, last point no \n");   //3 cops
 for(ir=0;ir<3;ir++)
 {
     fgets(line, sizeof(line), PunteroClave);
@@ -268,10 +271,18 @@ for(ir=0;ir<3;ir++)
     printf("Rectangle %ld  corners xini, xefe, yini, yefe: %ld %ld %ld %ld \n",ir+1,xini1[ir],xefe1[ir],yini1[ir],yefe1[ir]);
 }
 ;
-    fgets(line, sizeof(line), PunteroClave);
+    fgets(line, sizeof(line), PunteroClave); //higher L bar
     sscanf(line, "%ld", &maxlimit);
 Vmaxlimit=maxlimit;  // End starting and reading
+;
 factorL=rluminp*rvpunt/765;
+;
+    fgets(line, sizeof(line), PunteroClave);
+    sscanf(line, "%lf", &calib);
+;
+if (calib==0.0) {calib=1;}
+			;
+			;
 ;
 fclose(PunteroClave);
 
@@ -296,7 +307,7 @@ if (ev>-19) {factorL=(1.0/(100.0/2.0))*pow(2,ev)*0.125;
 // correction factorL reference for gamma (155 digit camera) different from point where luminance is calculated
 // (215 digit camera or 319.025 (absolute resp. 155 reference) digit corrected for gamma compression from camera)
 ;
-factorL=factorL*0.5755;  //// CALIBRATION
+factorL=factorL*0.5755*calib;  //// CALIBRATION DONE WITH calib if needed
 maxcont=rrEV*155*pow((255/155),gamm);
 ;  // first file normal (EV), then (EV-rEV), later (EV+rEV) Read and gamma-decompress
 for(i=0 ; i<altura ; i++)
@@ -364,7 +375,7 @@ fclose(PunteroImagenInicial2);
 ;// end lecture  bmp files
 PunteroDatos = fopen("Lumi.dat","wa");
 ;
-printf("Picture case, EV, rrEV, factorL, maxcont, lmax  %lf %lf %lf %lf %lf \n",ev,rrEV,factorL,maxcont,lmax);
+printf("Picture case, EV, rrEV, factorL, maxcont, lmax, calib  %lf %lf %lf %lf %lf %lf \n",ev,rrEV,factorL,maxcont,lmax,calib);
 printf("Computing... \n");
 //Attention! R G B over 255 steps 
 ;// out {} no parentheses
@@ -423,7 +434,7 @@ for (i=0; i<3;i++)
         fprintf(PunteroDatos,"If it is not calibred, scale of luminances from 0 to 255*rrEV \n");
         fprintf(PunteroDatos,"If it is calibred, Value and Luminance of point: %lf %lf coords x, y: %0.f %0.f \n",rvpunt,rluminp,rxpat,rypat);
         fprintf(PunteroDatos,"\n");
-        fprintf(PunteroDatos,"If data from picture, ev, rrEV, factorL(over 255): %lf %lf %lf %lf \n",ev,rrEV,factorL);
+        fprintf(PunteroDatos,"If data from picture, ev, rrEV, factorL(over 255), calib: %lf %lf %lf %lf \n",ev,rrEV,factorL,calib);
         fprintf(PunteroDatos,"lmax, from one maximum: %lf %lf \n",lmax,rrEV*155.*pow(255./155.,gamm));
         fprintf(PunteroDatos,"\n");
 fprintf(PunteroDatos,"The picture has average value (non-compressed): %lf \n",flc2*factorL);
