@@ -42,7 +42,8 @@ Lin12-13: xini, xefe: x start, x end, x define rectangle to find averages
 Lin14-15: yini, yefe, y start, x end, y define rectangle to find averages
           Attention: coordinates from down, left picture
 Line24:   Value Normalize cd/m2 Luminance graph (to the right last division)
-Line25:   0, normal computation (reserved)
+Line25:   Calib, multiplicative factor to calibrate luminance values (default=1)
+Line26:   0, normal computation (reserved)
 
 
 Results from executing the script:
