@@ -27,12 +27,14 @@ Can be obtained from .jpg files many cameras produce, convert to .bmp with Windo
 Numerical file (in ascii) input.dat Contents:
 Line1:   C1, integer, 0 normal processing reads ISO/ASA, Aperture Exposition
 Line2:   C2, integer, stops between pictures ('bracketing')
+	        NOTE: if C2=0, will ask for the stops between pictures from the console
 Line3:   C3, integer, number of luminance bands (recommended 5-7)
 
 Line5:   C5c float, value of gamma compression  (if 0, takes 2.2 as default)
 Line6:   if C1=0, ISO/ASA  of picture dib1.bmp (example: 200)
 Line7:   if C1=0, Aperture of picture dib1.bmp (ex: if f/11, give: 11)
 Line8:   if C1=0, Exposition     of   dib1.bmp (ex: if 1/320 s, give: 320)
+          NOTE: After computing the Exposition Ev from ISO, Aperture and Exposition, it will print it and ask from the console for the value to be used. In case the used               camera does not give ISO, Aperture and Exposition, but give “Brightness”, you should better calibrate the Ev to be used by having one picture where real Luminance            (in cd/m2) have been measured at some point.
 Line9:   C9 integer ask for RGB values of C9 points (xl[], yl[]). 0 if not
 Lines10-11*: xl[], yl[] C9 times 2 numbers (2*C9 files) (*if C9=0, omit) if C9>0 Attention bmp starts left down corner
 3 times:
