@@ -274,8 +274,17 @@ Vmaxlimit=maxlimit;  // End starting and reading
 factorL=rluminp*rvpunt/765;
 ;
 fclose(PunteroClave);
-        timexp=1.0/timexp;  //conversions
+
+if(timexp>0)
+    {    timexp=1.0/timexp;  //conversions
         ev=log((nab*nab/timexp)*100/iso)/log(2);
+   };
+;
+;
+printf("Ev (previous): %f \n", ev);
+    fgets(line, sizeof(line), stdin);
+    sscanf(line, "%Ev", &ev);
+;
 if(factorL==0){factorL=1;};
 ; //factorL used to give values in digit if non-zero code, or in units from calibration //original 0.125 from camera-> 0.167?
 ;
