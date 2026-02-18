@@ -27,14 +27,14 @@ long Clave1,Clave2,Clave3,Clave9,Rr,Gg,Bb,maxlimit,xini,xefe,yini,yefe;
 long long alm,anm,ample,aa,aar,aag,aab,xini1[3],xefe1[3],yini1[3],yefe1[3];
 long long i, j, k, n9, ntimexp,interval,ix,iy,ii,ji,ik,jk,ir;
 long long xpat,ypat,vpunt,iluminp,escala2,npromirect;
-long long altura,anchura,f0alt,x,xl[100],yl[100],limit[20];
+long long altura,anchura,f0alt,xl[100],yl[100],limit[20];
 double aargb,finterval,rpromirect,rpromirectr,rpromirectg,rpromirectb,calib;
 double Lm,falt,fanch,fanch1,falt1,rxl,ryl,r1r,ss,fnlmax,fnlmin,r2,g2,b2,lmax;
 double lc2,flc2,factorL,lc2r,lc2g,lc2b,flc2r,flc2g,flc2b;
 double ssr,ssg,ssb, rdesvrect,rdesvrecr,rdesvrecg,rdesvrecb,PL,PR,PG,PB;
 double rxini,rxefe,ryini,ryefe,rescala2,ri,escalalimit,Vmaxlimit,factor;
-double rrEV,su,rnpromirect,R1,G1,B1;
-double rluminp,rxpat,rypat,rvpunt,gamm,ugamm,maxcont,timexp,nab,iso,ev,rEV,Clave5c,Clave6;
+double rrEV,su,rnpromirect,R1,G1,B1,x,y,z,sxyz;
+double rluminp,rxpat,rypat,rvpunt,gamm,ugamm,maxcont,timexp,nab,iso,ev,evo,rEV,Clave5c,Clave6;
 char c, line[100]; //input: dib1.bmp, dib2.bmp (underexposed), dib3.bmp (overexposed)  //int alt=6000;   MAX  //int anch=9000;
 unsigned char b,g,r,bb,gg,rr,bbc,bmax;
 FILE *PunteroImagenInicial;
@@ -235,7 +235,7 @@ f0alt=0.04*falt;
 fanch1=fanch-2;
 falt1=falt-2;
 rEV=Clave2;
-if (Clave2==0) {printf("Jump in EV between pictures \n");
+if (Clave2==0) {printf("Jump in EV between pictures (Intro=0) \n");
     fgets(line, sizeof(line), stdin);
     sscanf(line, "%lf", &rEV);
 }  // end Clave2==0
@@ -285,16 +285,22 @@ if (calib==0.0) {calib=1;}
 			;
 ;
 fclose(PunteroClave);
-
+;
+;
 if(timexp>0)
     {    timexp=1.0/timexp;  //conversions
         ev=log((nab*nab/timexp)*100/iso)/log(2);
    };
 ;
 ;
-printf("Ev (previous): %f \n", ev);
+evo=ev;
+printf("Intro to conserve value: Ev (previous): %f \n", ev);
     fgets(line, sizeof(line), stdin);
-    sscanf(line, "%Ev", &ev);
+    sscanf(line, "%lf", &ev);
+;
+if(ev==0) 
+{ev=evo;};
+;
 ;
 if(factorL==0){factorL=1;};
 ; //factorL used to give values in digit if non-zero code, or in units from calibration //original 0.125 from camera-> 0.167?
@@ -307,6 +313,7 @@ if (ev>-19) {factorL=(1.0/(100.0/2.0))*pow(2,ev)*0.125;
 // correction factorL reference for gamma (155 digit camera) different from point where luminance is calculated
 // (215 digit camera or 319.025 (absolute resp. 155 reference) digit corrected for gamma compression from camera)
 ;
+printf("Computing... \n");
 factorL=factorL*0.5755*calib;  //// CALIBRATION DONE WITH calib if needed
 maxcont=rrEV*155*pow((255/155),gamm);
 ;  // first file normal (EV), then (EV-rEV), later (EV+rEV) Read and gamma-decompress
@@ -416,30 +423,30 @@ ssb=sqrt(ssb/(falt*fanch));
         fprintf(PunteroDatos,"Input keys: C1, SaltEv, Nbands, gamm, ASA/ISO, Nab, texp, Np \n");
         fprintf(PunteroDatos,"%ld %ld %ld %lf %lf %lf %lf %ld \n",Clave1,Clave2,Clave3,Clave5c,Clave6,nab,timexp,Clave9);
 	if(Clave9>0) 	{
-        fprintf(PunteroDatos,"No. points find average (9p)  %ld \n",Clave9);
+        fprintf(PunteroDatos,"Number of points to find average (9p)  %ld \n",Clave9);
 		for (i=1; i<=Clave9; ++i)
- 	 {fprintf(PunteroDatos, "No.Points,  x , y: %ld %ld %ld \n",i,xl[i],yl[i]);
+ 	 {fprintf(PunteroDatos, "Point:  x , y: %ld %ld %ld \n",i,xl[i],yl[i]);
 	 };
 };
 ;
 ;
         fprintf(PunteroDatos, " \n");
 for (i=0; i<3;i++)
-{fprintf(PunteroDatos, "Rectangles to average, coord.: N.rect, xini,xefe; yini,yefe %ld %ld %ld %ld %ld \n",i+1,xini1[i],xefe1[i],yini1[i],yefe1[i]);
+{fprintf(PunteroDatos, "Rectangle to average, coord.: N.rect, xini,xefe; yini,yefe %ld %ld %ld %ld %ld \n",i+1,xini1[i],xefe1[i],yini1[i],yefe1[i]);
 };
 ;
         fprintf(PunteroDatos,"\n");
         fprintf(PunteroDatos,"Computation with luminances in cd/m2 \n");
         fprintf(PunteroDatos,"\n");
         fprintf(PunteroDatos,"If it is not calibred, scale of luminances from 0 to 255*rrEV \n");
-        fprintf(PunteroDatos,"If it is calibred, Value and Luminance of point: %lf %lf coords x, y: %0.f %0.f \n",rvpunt,rluminp,rxpat,rypat);
+        fprintf(PunteroDatos,"If it is puntually calibred, Value and Luminance of point: %lf %lf coords x, y: %0.f %0.f \n",rvpunt,rluminp,rxpat,rypat);
         fprintf(PunteroDatos,"\n");
-        fprintf(PunteroDatos,"If data from picture, ev, rrEV, factorL(over 255), calib: %lf %lf %lf %lf \n",ev,rrEV,factorL,calib);
-        fprintf(PunteroDatos,"lmax, from one maximum: %lf %lf \n",lmax,rrEV*155.*pow(255./155.,gamm));
+        fprintf(PunteroDatos,"If data from picture, gamma, EV, rrEV, factorL, calib: %lf %lf %lf %lf %lf \n",gamm,ev,rrEV,factorL,calib);
+        fprintf(PunteroDatos,"lmax in picture, from maximum registrable: %lf %lf \n",lmax,rrEV*155.*pow(255./155.,gamm));
         fprintf(PunteroDatos,"\n");
 fprintf(PunteroDatos,"The picture has average value (non-compressed): %lf \n",flc2*factorL);
 fprintf(PunteroDatos," \n");
-fprintf(PunteroDatos, "Normalized Luminance values at right of the lower bar (cd/m2): %lf \n",Vmaxlimit);
+fprintf(PunteroDatos, "Normalized Luminance values at the lower bar maximum (cd/m2): %lf \n",Vmaxlimit);
 	    fprintf(PunteroDatos, " \n");
         fprintf(PunteroDatos, " \n");
         fprintf(PunteroDatos,"Picture of height*width:  %0.f  %0.f \n",falt,fanch);
@@ -451,6 +458,15 @@ fprintf(PunteroDatos,"Average  G  and  standard  deviation  (cd/m2): %lf %lf \n"
 fprintf(PunteroDatos,"Average  B  and  standard  deviation  (cd/m2): %lf %lf \n",flc2b*factorL/3,ssb*factorL/3);
 fprintf(PunteroDatos," \n");
 fprintf(PunteroDatos,"r,  g,  b  (unitary) : %lf  %lf  %lf  \n",flc2r/flc2/3,flc2g/flc2/3,flc2b/flc2/3);
+fprintf(PunteroDatos," \n");
+x=flc2r/flc2/3*0.4124+flc2g/flc2/3*0.3576+flc2b/flc2/3*0.1805;
+y=flc2r/flc2/3*0.2126+flc2g/flc2/3*0.7152+flc2b/flc2/3*0.0722;
+z=flc2r/flc2/3*0.0193+flc2g/flc2/3*0.1192+flc2b/flc2/3*0.9505;
+sxyz=x+y+z;
+x=x/sxyz;
+y=y/sxyz;
+z=z/sxyz;
+fprintf(PunteroDatos,"x,  y,  z  (unitary) : %lf  %lf  %lf  \n",x,y,z);
 fprintf(PunteroDatos," \n");
 fprintf(PunteroDatos," \n");  //out
 printf("Writing  results... \n");
@@ -514,6 +530,15 @@ fprintf(PunteroDatos,"Average and standard deviation B on the rectangle: %lf %lf
 fprintf(PunteroDatos," \n");
 fprintf(PunteroDatos,"Coordinates r, g, b unitary: %lf %lf %lf \n",rpromirectr/(rpromirectr+rpromirectg+rpromirectb),rpromirectg/(rpromirectr+rpromirectg+rpromirectb),rpromirectb/(rpromirectr+rpromirectg+rpromirectb));
 fprintf(PunteroDatos," \n");
+x=rpromirectr*0.4124+rpromirectg*0.3576+rpromirectb*0.1805;
+y=rpromirectr*0.2126+rpromirectg*0.7152+rpromirectb*0.0722;
+z=rpromirectr*0.0193+rpromirectg*0.1192+rpromirectb*0.9505;
+sxyz=x+y+z;
+x=x/sxyz;
+y=y/sxyz;
+z=z/sxyz;
+fprintf(PunteroDatos,"x,  y,  z  (unitary) : %lf  %lf  %lf  \n",x,y,z);
+fprintf(PunteroDatos," \n");
 fprintf(PunteroDatos," \n");
 }  //close ir (0, 1, 2)
 ;
@@ -546,6 +571,16 @@ fprintf(PunteroDatos," \n");
 fprintf(PunteroDatos, "Results 3 pictures (dib1.bmp, dib2.bmp, dib3.bmp) \n");
 fprintf(PunteroDatos, "Point xl yl from left, down: %ld %ld \n",xl[j],yl[j]);
 fprintf(PunteroDatos, "Values R,G,B, Lumin (cd/m2): %lf %lf %lf %lf \n",PR*factorL/3,PG*factorL/3,PB*factorL/3,PL*factorL/3);
+fprintf(PunteroDatos," \n");
+x=PR*0.4124+PG*0.3576+PB*0.1805;
+y=PR*0.2126+PG*0.7152+PB*0.0722;
+z=PR*0.0193+PG*0.1192+PB*0.9505;
+sxyz=x+y+z;
+x=x/sxyz;
+y=y/sxyz;
+z=z/sxyz;
+fprintf(PunteroDatos,"x,  y,  z  (unitary) : %lf  %lf  %lf  \n",x,y,z);
+
 printf(" \n");
 printf("Results 3 pictures (dib1.bmp, dib2.bmp, dib3.bmp) \n");
 printf("Point xl yl from left, below: %ld %ld \n",xl[j],yl[j]);
@@ -580,6 +615,15 @@ fprintf(PunteroDatos," \n");
 fprintf(PunteroDatos,"Results 1 picture (dib1.bmp) \n");
 fprintf(PunteroDatos, "Point xl yl from left, below: %ld %ld \n",xl[j],yl[j]);
 fprintf(PunteroDatos, "Values R,G,B, Lumin (cd/m2) : %lf %lf %lf %lf \n",PR*factorL/3,PG*factorL/3,PB*factorL/3,PL*factorL/3);
+fprintf(PunteroDatos," \n");
+x=PR*0.4124+PG*0.3576+PB*0.1805;
+y=PR*0.2126+PG*0.7152+PB*0.0722;
+z=PR*0.0193+PG*0.1192+PB*0.9505;
+sxyz=x+y+z;
+x=x/sxyz;
+y=y/sxyz;
+z=z/sxyz;
+fprintf(PunteroDatos,"x,  y,  z  (unitary) : %lf  %lf  %lf  \n",x,y,z);
 printf(" \n");
 printf("Results 1 picture (dib1.bmp) \n");
 printf("Point xl yl from left, below: %ld %ld \n",xl[j],yl[j]);
